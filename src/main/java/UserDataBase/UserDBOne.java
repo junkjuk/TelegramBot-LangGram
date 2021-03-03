@@ -15,6 +15,22 @@ public class UserDBOne implements AbstractUser {
     public String sourceLang;
     public String yourLang;
     public Boolean isInAdding;
+    public long chatUserId;
+    public String firstNameTarget;
+    public boolean isInChat;
+    public boolean isInChoise;
+
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+
+
+
+
+
     public ArrayList<ContactUser> contactList = new ArrayList<ContactUser>();
 
     public void addContact(Long chatId){
@@ -41,6 +57,10 @@ public class UserDBOne implements AbstractUser {
         this.targetLang = message.getFrom().getLanguageCode();
         this.yourLang = message.getFrom().getLanguageCode();
         this.sourceLang = message.getFrom().getLanguageCode();
+        this.chatUserId = message.getChatId();
+        this.isInChat = false;
+        this.isInChoise = false;
+        this.firstNameTarget = message.getFrom().getFirstName();
     }
 
     public UserDBOne() {

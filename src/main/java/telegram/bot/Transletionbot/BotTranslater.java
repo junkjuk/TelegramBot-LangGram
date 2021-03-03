@@ -38,7 +38,6 @@ public class BotTranslater extends TelegramLongPollingBot {
 
 
 
-        //SendMessage respone = new SendMessage();
         //respone.setText(BotBrain.TransM(message.getText(),"uk","en"));
 
         if (UserDB.getUser(message.getChatId()) == null){
@@ -60,29 +59,52 @@ public class BotTranslater extends TelegramLongPollingBot {
 
         UserDBOne user = UserDB.getUser(message.getChatId());
 
-
-        if (user.isInAdding!=null &&
-            user.isInAdding == true){
+        System.out.println("1111111");
+        if (message.getText().equals(EXIT_REQUEST)){
+            System.out.println("2222222");
+            mess.setText("Ви перенесені на початкове меню");
+            mess.setReplyMarkup(Menus.getMainMenu());
+            UserDB.changeField(message,false);
+            UserDB.isInChoisContact(message,false);
+            UserDB.isInChatU(message,false);
+            return mess;
+        } else if (user.isInAdding){
             if (message.getText().equals(EXIT_REQUEST)){
                 mess.setText("Ви перенесені на початкове меню");
                 mess.setReplyMarkup(Menus.getMainMenu());
                 UserDB.changeField(message,false);
+                UserDB.isInChoisContact(message,false);
                 return mess;
             } else if (isNumeric(message.getText())
                 && UserDB.getUser(Long.parseLong(message.getText())) != null){
                 mess.setText("Ми додали користувача до вашого списку контактів");
                 UserDB.addContact(message,Long.parseLong(message.getText()));
                 UserDB.changeField(message,false);
+                UserDB.isInChoisContact(message,false);
                 mess.setReplyMarkup(Menus.getMainMenu());
                 return mess;
             }
             else {
                 mess.setText("Ідентифікаційний номер користувача не дійсний, спробуйте знову");
+                UserDB.isInChoisContact(message,false);
                 return mess;
             }
-        }
+        } else if (user.isInChoise){
+            mess.setText("Ви будете писати користувачу "+message.getText());
+            mess.setReplyMarkup(Menus.getProfileMenu());
 
-        else {
+            UserDB.changeChat(message, UserDB.getUserFirstName(message.getText()).getId(), message.getText());
+            UserDB.isInChoisContact(message,false);
+            return mess;
+        } else if (user.isInChat){
+            mess.setText(message.getText());
+            mess.setReplyMarkup(Menus.getProfileMenu());
+            mess.setChatId(valueOf(user.chatUserId));
+            System.out.println(message.getText());
+            System.out.println(user.chatUserId);
+            return mess;
+
+        } else {
             switch (message.getText()){
                 case YOUR_PROFILE_REQUEST:
                     mess.setReplyMarkup(Menus.getProfileMenu());
@@ -95,15 +117,18 @@ public class BotTranslater extends TelegramLongPollingBot {
                             +"\n"+"Мова з якої буде переклад "+user.targetLang
                     );
                     UserDB.changeField(message,false);
+                    UserDB.isInChoisContact(message,false);
                     return mess;
 
                 case SENDING_SETTINGS_REQUEST:
                     mess.setReplyMarkup(Menus.getSettingsMenu(message));
                     mess.setText(SENDING_SETTINGS_REQUEST);
                     UserDB.changeField(message,false);
+                    UserDB.isInChoisContact(message,false);
                     return mess;
                 case ADD_TO_CONTACT_LIST_REQUEST:
                     UserDB.changeField(message,true);
+                    UserDB.isInChoisContact(message,false);
                     mess.setReplyMarkup(Menus.getAddedMenu());
                     mess.setText("Введіть ідентифікаційний номер користувача");
                     return mess;
@@ -111,6 +136,7 @@ public class BotTranslater extends TelegramLongPollingBot {
                     mess.setText("Ви перенесені на початкове меню");
                     mess.setReplyMarkup(Menus.getMainMenu());
                     UserDB.changeField(message,false);
+                    UserDB.isInChoisContact(message,false);
                     return mess;
 
 
@@ -119,6 +145,7 @@ public class BotTranslater extends TelegramLongPollingBot {
                     if (!user.contactList.isEmpty()){
                         mess.setReplyMarkup(Menus.getContactsMenu(message));
                     }
+                    UserDB.isInChoisContact(message,true);
                     UserDB.changeField(message,false);
                     return mess;
 

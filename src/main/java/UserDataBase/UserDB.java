@@ -43,6 +43,35 @@ public class UserDB {
         );
     }
 
+    public static void isInChoisContact(Message message, boolean a){
+        collection.updateOne(
+                Filters.eq("chatId",message.getChatId()),
+                Updates.set("isInChoise",a)
+        );
+    }
+
+
+    public static void isInChatU(Message message, boolean a){
+        collection.updateOne(
+                Filters.eq("chatId",message.getChatId()),
+                Updates.set("isInChat",a)
+        );
+    }
+
+    public static void changeChat(Message message,  long id,String name){
+        isInChatU(message,true);
+
+        collection.updateOne(
+                Filters.eq("chatId",message.getChatId()),
+                Updates.set("chatUserId",id)
+        );
+        collection.updateOne(
+                Filters.eq("chatId",message.getChatId()),
+                Updates.set("firstNameTarget",name)
+        );
+    }
+
+
     public static void addContact(Message message, Long chatId){
         collection.updateOne(
                 Filters.eq("chatId",message.getChatId()),
@@ -63,6 +92,18 @@ public class UserDB {
         return null;
     }
 
+    public static UserDBOne getUserFirstName(String firstName){
+
+        FindIterable<UserDBOne> iterDoc = collection.find();
+
+        Iterator it = iterDoc.iterator();
+
+        while (it.hasNext()) {
+            UserDBOne user = (UserDBOne) it.next();
+            if(user.getFirstName().equals(firstName))return user;
+        }
+        return null;
+    }
 
 
 }
