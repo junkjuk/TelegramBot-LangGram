@@ -13,6 +13,7 @@ import telegram.bot.Transletionbot.Menus.Menus;
 import java.util.Objects;
 
 import static java.lang.String.valueOf;
+import static telegram.bot.Transletionbot.Menus.Menus.getContactsMenu;
 
 
 public class BotTranslater extends TelegramLongPollingBot {
@@ -111,6 +112,17 @@ public class BotTranslater extends TelegramLongPollingBot {
                     mess.setReplyMarkup(Menus.getMainMenu());
                     UserDB.changeField(message,false);
                     return mess;
+
+
+                case CONTACT_LIST_REQUEST:
+                    mess.setText("Контакти");
+                    if (!user.contactList.isEmpty()){
+                        mess.setReplyMarkup(Menus.getContactsMenu(message));
+                    }
+                    UserDB.changeField(message,false);
+                    return mess;
+
+
                 default:
                     mess.setText("You are new user");
                     mess.setReplyMarkup(Menus.getMainMenu());

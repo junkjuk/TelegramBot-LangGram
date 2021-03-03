@@ -1,6 +1,7 @@
 package telegram.bot.Transletionbot.Menus;
 
 import UserDataBase.UserDB;
+import UserDataBase.UserDBOne;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -56,6 +57,23 @@ public class Menus {
         row1.add(EXIT_REQUEST);
         List<KeyboardRow> rows = new ArrayList<>();
         rows.add(row1);
+        markup.setKeyboard(rows);
+        return markup;
+    }
+    public static ReplyKeyboardMarkup getContactsMenu(Message message){
+
+        UserDBOne user = UserDB.getUser(message.getChatId());
+
+
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
+        List<KeyboardRow> rows = new ArrayList<>();
+        for (int i = 0;i < user.contactList.size();i++){
+            KeyboardRow row = new KeyboardRow();
+            row.add(user.contactList.get(i).firstName);
+            rows.add(row);
+        }
+
+
         markup.setKeyboard(rows);
         return markup;
     }
