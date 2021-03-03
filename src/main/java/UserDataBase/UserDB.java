@@ -35,18 +35,18 @@ public class UserDB {
         collection.insertOne(new UserDBOne(message));
     }
 
-    public static void addContact(Message message,String f1){
+
+    public static void changeField(Message message, boolean a){
         collection.updateOne(
                 Filters.eq("chatId",message.getChatId()),
-                Updates.set("yourLang",f1)
+                Updates.set("isInAdding",a)
         );
+    }
+
+    public static void addContact(Message message, Long chatId){
         collection.updateOne(
                 Filters.eq("chatId",message.getChatId()),
-                Updates.set("targetLang","ru")
-        );
-        collection.updateOne(
-                Filters.eq("chatId",message.getChatId()),
-                Updates.set("sourceLang","en")
+                Updates.push("contactList",new ContactUser(chatId))
         );
     }
 

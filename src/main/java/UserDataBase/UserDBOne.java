@@ -3,7 +3,6 @@ package UserDataBase;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserDBOne implements AbstractUser {
 
@@ -17,8 +16,6 @@ public class UserDBOne implements AbstractUser {
     public String yourLang;
     public Boolean isInAdding;
     public ArrayList<ContactUser> contactList = new ArrayList<ContactUser>();
-
-
 
     public void addContact(Long chatId){
         contactList.add(new ContactUser(chatId));
@@ -40,6 +37,10 @@ public class UserDBOne implements AbstractUser {
         this.chatId = message.getChatId();
         this.firstName = message.getFrom().getFirstName();
         this.lastName = message.getFrom().getLastName();
+        this.isInAdding = false;
+        this.targetLang = message.getFrom().getLanguageCode();
+        this.yourLang = message.getFrom().getLanguageCode();
+        this.sourceLang = message.getFrom().getLanguageCode();
     }
 
     public UserDBOne() {

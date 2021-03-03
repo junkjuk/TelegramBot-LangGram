@@ -13,4 +13,6 @@ public class ContactUser {
         this.lastName = UserDB.getUser(chatId).lastName;
         this.chatId = chatId;
     }
+    public ContactUser() {
+    }
 }

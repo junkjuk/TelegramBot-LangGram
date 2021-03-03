@@ -49,6 +49,16 @@ public class Menus {
         markup.setKeyboard(rows);
         return markup;
     }
+    public static ReplyKeyboardMarkup getAddedMenu(){
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
+
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add(EXIT_REQUEST);
+        List<KeyboardRow> rows = new ArrayList<>();
+        rows.add(row1);
+        markup.setKeyboard(rows);
+        return markup;
+    }
 
     public static ReplyKeyboardMarkup getSettingsMenu(Message message){
         ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
